@@ -1,21 +1,27 @@
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
-import io.undertow.util.Headers;
+import io.undertow.server.RoutingHandler;
 
 /**
  * @author Stuart Douglas
  */
 public class Application {
     public static void main(final String[] args) {
+        HttpHandler ROUTES = new RoutingHandler()
+                .get("/", RoutingHandlers.constantStringHandler("GET - My Homepage"))
+//                .get("/myRoute", RoutingHandlers.constantStringHandler("GET - My Route"))
+//                .post("/addAccount", RoutingHandlers.constantStringHandler("POST - My Route"))
+                .post("/makeTransfer", RoutingHandlers.constantStringHandler("POST - My Route"))
+//                .get("/myOtherRoute", RoutingHandlers.constantStringHandler("GET - My Other Route"))
+//                // Wildcards and RoutingHandler had some bugs before version 1.4.8.Final
+//                .get("/myRoutePrefix*", RoutingHandlers.constantStringHandler("GET - My Prefixed Route"))
+                // Pass a handler as a method reference.
+//                .setFallbackHandler(RoutingHandlers.notFoundHandler())
+                ;
+
         Undertow server = Undertow.builder()
                 .addHttpListener(8080, "localhost")
-                .setHandler(new HttpHandler() {
-                    public void handleRequest(final HttpServerExchange exchange) throws Exception {
-                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                        exchange.getResponseSender().send("Hello World");
-                    }
-                }).build();
+                .setHandler(ROUTES).build();
         server.start();
     }
 }

@@ -3,68 +3,102 @@ package model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-/**
- * Example account object that is persisted to disk by the DAO and other example classes.
- */
-@DatabaseTable(tableName = "accounts")
-public class Account {
+import java.util.Date;
+import java.util.Objects;
 
-    // for QueryBuilder to be able to find the fields
-    public static final String NAME_FIELD_NAME = "name";
-    public static final String PASSWORD_FIELD_NAME = "passwd";
+
+@DatabaseTable(tableName = "account")
+public class Account {
 
     @DatabaseField(generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = NAME_FIELD_NAME, canBeNull = false)
-    private String name;
+    @DatabaseField(columnName = "description", canBeNull = false)
+    private String description;
 
-    @DatabaseField(columnName = PASSWORD_FIELD_NAME)
-    private String password;
+    @DatabaseField(columnName = "type", canBeNull = false)
+    private String type;
+
+    @DatabaseField(columnName = "balance", canBeNull = false)
+    private Double balance;
+
+    @DatabaseField(columnName = "modified_date_time", canBeNull = false)
+    private Date MDT;
+
+    @DatabaseField(columnName = "created_date_time", canBeNull = false)
+    private Date CDT;
 
     Account() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 
-    public Account(String name) {
-        this.name = name;
-    }
-
-    public Account(String name, String password) {
-        this.name = name;
-        this.password = password;
+    public Account(String description, String type, Double balance) {
+        this.balance = balance;
+        this.description = description;
+        this.type = type;
+        this.CDT = new Date(System.currentTimeMillis());
+        this.MDT = new Date(System.currentTimeMillis());
     }
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getDescription() {
+        return description;
     }
 
-    public String getPassword() {
-        return password;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public Date getMDT() {
+        return MDT;
+    }
+
+    public void setMDT(Date MDT) {
+        this.MDT = MDT;
+    }
+
+    public Date getCDT() {
+        return CDT;
+    }
+
+    public void setCDT(Date CDT) {
+        this.CDT = CDT;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+        Account account = (Account) o;
+        return getId() == account.getId();
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == null || other.getClass() != getClass()) {
-            return false;
-        }
-        return name.equals(((Account) other).name);
+        return Objects.hash(getId(), getDescription(), getType(), getBalance(), getMDT(), getCDT());
     }
 }
