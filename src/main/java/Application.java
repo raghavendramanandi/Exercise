@@ -2,11 +2,17 @@ import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.RoutingHandler;
 
-/**
- * @author Stuart Douglas
- */
+import static java.lang.System.exit;
+
 public class Application {
     public static void main(final String[] args) {
+        try{
+            new SetupData().doMain(args);
+        }catch (Exception e){
+            e.printStackTrace();
+            exit(1);
+        }
+
         HttpHandler ROUTES = new RoutingHandler()
                 .get("/", RoutingHandlers.constantStringHandler("GET - My Homepage"))
 //                .get("/myRoute", RoutingHandlers.constantStringHandler("GET - My Route"))

@@ -10,13 +10,17 @@ import java.util.Objects;
 @DatabaseTable(tableName = "account")
 public class Account {
 
-    @DatabaseField(generatedId = true)
+    public final static String ACC_ID = "id";
+    public final static String ACC_DESC = "description";
+    public final static String ACC_TYPE = "type";
+
+    @DatabaseField(columnName = ACC_ID, generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "description", canBeNull = false)
+    @DatabaseField(columnName = ACC_DESC, canBeNull = false)
     private String description;
 
-    @DatabaseField(columnName = "type", canBeNull = false)
+    @DatabaseField(columnName = ACC_TYPE, canBeNull = false)
     private String type;
 
     @DatabaseField(columnName = "balance", canBeNull = false)
@@ -100,5 +104,17 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getDescription(), getType(), getBalance(), getMDT(), getCDT());
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", balance=" + balance +
+                ", MDT=" + MDT +
+                ", CDT=" + CDT +
+                '}';
     }
 }
