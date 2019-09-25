@@ -5,9 +5,11 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import model.Account;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -23,6 +25,13 @@ public class AccountDaoTest {
         connectionSource = new JdbcConnectionSource("jdbc:h2:mem:bank-test");
         TableUtils.createTable(connectionSource, Account.class);
         accountDao = DaoManager.createDao(connectionSource, Account.class);
+    }
+
+    @After
+    public void taredown() throws IOException {
+        if (connectionSource != null) {
+            connectionSource.close();
+        }
     }
     @Test
     public void shouldReturnTheAccountWhenTheAccountExists() throws SQLException {
