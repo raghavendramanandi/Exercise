@@ -13,17 +13,19 @@ public class Account {
     public final static String ACC_ID = "id";
     public final static String ACC_DESC = "description";
     public final static String ACC_TYPE = "type";
+    public final static String ACC_BALANCE = "balance";
+
 
     @DatabaseField(columnName = ACC_ID, generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = ACC_DESC, canBeNull = false)
+    @DatabaseField(columnName = ACC_DESC, canBeNull = false, unique = true)
     private String description;
 
     @DatabaseField(columnName = ACC_TYPE, canBeNull = false)
     private String type;
 
-    @DatabaseField(columnName = "balance", canBeNull = false)
+    @DatabaseField(columnName = ACC_BALANCE, canBeNull = false)
     private Double balance;
 
     @DatabaseField(columnName = "modified_date_time", canBeNull = false)
