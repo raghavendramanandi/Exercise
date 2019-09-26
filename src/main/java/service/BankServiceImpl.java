@@ -2,18 +2,17 @@ package service;
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.misc.TransactionManager;
-import enums.Status;
 import exceptions.*;
 import model.Account;
 import model.Request.CreateAccountRequest;
 import model.Request.CreateUserRequest;
 import model.Request.TransferRequest;
-import model.Response.TransactionResponse;
 import model.User;
 import model.UserAccount;
 import repository.AccountDao;
 import repository.UserAccountDao;
 import repository.UserDao;
+import utils.Util;
 import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
 
@@ -74,30 +73,29 @@ public class BankServiceImpl {
         return accountDao.getAllAccounts();
     }
 
-    public TransactionResponse transfer(TransferRequest transferRequest)
+    public void transfer(TransferRequest transferRequest)
             throws Exception, SameFromAndToAccountException, InvalidUserException, InvalidAmountException {
         transactionRequestValidator.validate(transferRequest, userDao);
-//        accountDao.transfer(
-//                accountDao.getAccountForId(transferRequest.getFromAccountId()),
-//                accountDao.getAccountForId(transferRequest.getToAccountId()),
-//                transferRequest.getAmount()
-//        );
+        double amount = Util.round(transferRequest.getAmount());
         TransactionManager transactionManager = new TransactionManager(connectionSource);
         try {
             transactionManager.callInTransaction(() -> {
                 Account fromAccount = accountDao.getAccountForId(transferRequest.getFromAccountId());
                 Account toAccount = accountDao.getAccountForId(transferRequest.getToAccountId());
 
-                if(fromAccount.getBalance() < transferRequest.getAmount()){
+                if(fromAccount.getBalance() < amount){
                     throw new InsufficientBalanceException("Insufficient funds");
                 }
-                accountDao.updateAccount(fromAccount, debit(transferRequest.getAmount()));
-                accountDao.updateAccount(toAccount, credit(transferRequest.getAmount()));
+                accountDao.updateAccount(fromAccount, debit(amount));
+                accountDao.updateAccount(toAccount, credit(amount));
                 return true;
             });
         } finally {
         }
-        return new TransactionResponse(Status.OK);
+    }
+
+    public List<UserAccount> getAllUserAccount() throws SQLException {
+        return userAccountDao.getAllUserAccounts();
     }
 
     private double credit(double amount) {
@@ -106,9 +104,5 @@ public class BankServiceImpl {
 
     private double debit(double amount) {
         return amount*-1;
-    }
-
-    public List<UserAccount> getAllUserAccount() throws SQLException {
-        return userAccountDao.getAllUserAccounts();
     }
 }

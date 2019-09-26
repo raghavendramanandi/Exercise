@@ -45,12 +45,13 @@ public class ConstantStringHandler implements HttpHandler {
                     output = SUCCESS;
                     break;
                 case "transfer":
-                    body = getBodyFromExchangeForPostRequest(exchange);
+                    body = emptyCheck(getBodyFromExchangeForPostRequest(exchange));
                     BankSingleton.getInstance().transfer(mapper.readValue(body, TransferRequest.class));
                     output = SUCCESS;
                     break;
                 case "healthCheck":
                     output = "Ready to server";
+                    break;
             }
         }catch (Exception | ApplicationException | InvalidUserException | InvalidTypeForAccountException |
                 InvalidDescriptionForAccountException | InvalidUsernameForAccountException |

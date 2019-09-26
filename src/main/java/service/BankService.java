@@ -4,7 +4,6 @@ import model.Account;
 import model.Request.CreateAccountRequest;
 import model.Request.CreateUserRequest;
 import model.Request.TransferRequest;
-import model.Response.TransactionResponse;
 import model.User;
 
 import java.util.List;
@@ -19,5 +18,5 @@ public interface BankService {
     // Account summery
     public List<Account> getAllAccounts();
     // transfer
-    public TransactionResponse transfer(TransferRequest transferRequest);
+    public void transfer(TransferRequest transferRequest);
 }
