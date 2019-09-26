@@ -45,7 +45,7 @@ public class SetupData {
         }
     }
 
-    private void setupDatabase(ConnectionSource connectionSource) throws Exception {
+    public void setupDatabase(ConnectionSource connectionSource) throws Exception {
         userDao = DaoManager.createDao(connectionSource, User.class);
         accountDao = DaoManager.createDao(connectionSource, Account.class);
         userAccountDao = DaoManager.createDao(connectionSource, UserAccount.class);
@@ -54,7 +54,7 @@ public class SetupData {
         TableUtils.createTable(connectionSource, UserAccount.class);
     }
 
-    private void readWriteData() throws Exception {
+    public void readWriteData() throws Exception {
         //Simple account
         User user1 = new User("Jim Coakley");
         userDao.create(user1);

@@ -2,6 +2,7 @@ model/Response/CreateUserResponse.class
 model/Response/TransactionResponse.class
 repository/AccountDao.class
 model/Account.class
+exceptions/ApplicationException.class
 TransactionHandler.class
 model/Request/CreateUserRequest.class
 JavaSeH2Memory.class
