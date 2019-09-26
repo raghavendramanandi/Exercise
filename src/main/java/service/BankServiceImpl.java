@@ -19,7 +19,7 @@ import validator.TransactionRequestValidator;
 import java.sql.SQLException;
 import java.util.List;
 
-public class BankServiceImpl {
+public class BankServiceImpl implements BankService{
     private AccountDao accountDao;
     private UserDao userDao;
     private TransactionRequestValidator transactionRequestValidator;
@@ -42,7 +42,8 @@ public class BankServiceImpl {
         userDao.createUser(new User(createUserRequest.getUserName()));
     }
 
-    public void createAccount(CreateAccountRequest createAccountRequest) throws Exception, InvalidUserException, InvalidTypeForAccountException, InvalidDescriptionForAccountException, InvalidUsernameForAccountException {
+    public void createAccount(CreateAccountRequest createAccountRequest) throws Exception, InvalidUserException,
+            InvalidTypeForAccountException, InvalidDescriptionForAccountException, InvalidUsernameForAccountException {
         createAccountValidator.validate(createAccountRequest, userDao);
         /*
         * validation need not be inside transaction as if when checked, if the user does not exist an exception will be thrown.
@@ -74,7 +75,8 @@ public class BankServiceImpl {
     }
 
     public void transfer(TransferRequest transferRequest)
-            throws Exception, SameFromAndToAccountException, InvalidUserException, InvalidAmountException {
+            throws Exception, SameFromAndToAccountException, InvalidUserException,
+            InvalidAmountException, UserDoesNotOwnTheAccountToTransfer {
         transactionRequestValidator.validate(transferRequest, userDao, userAccountDao);
         double amount = Util.round(transferRequest.getAmount());
         TransactionManager transactionManager = new TransactionManager(connectionSource);

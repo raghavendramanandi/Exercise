@@ -54,40 +54,9 @@ public class AccountDaoTest {
     public void shouldBeAbleToTransferFromOneAccountToAnotherIfFundIsAvailable() throws Exception {
         AccountDao dao = new AccountDao(connectionSource, accountDao);
         accountDao.create(new Account("acc-1", "savings", 200.0));
-        accountDao.create(new Account("acc-2", "savings", 0.0));
-        Account acc1 = dao.getAccountForId(1);
-        Account acc2 = dao.getAccountForId(2);
 
-        assertEquals("acc-1", acc1.getDescription());
-        assertEquals("acc-2", acc2.getDescription());
-        assertEquals(200.0, acc1.getBalance(), 0.0);
-        assertEquals(000.0, acc2.getBalance(), 0.0);
-
-        dao.transfer(acc1, acc2, 100);
-
-        acc1 = dao.getAccountForId(1);
-        acc2 = dao.getAccountForId(2);
-
-        assertEquals("acc-1", acc1.getDescription());
-        assertEquals("acc-2", acc2.getDescription());
-        assertEquals(100.0, acc1.getBalance(), 0.0);
-        assertEquals(100.0, acc2.getBalance(), 0.0);
-    }
-
-    @Test(expected = SQLException.class)
-    public void shouldThrowExceptionIfFundsAreNotAvailable() throws Exception {
-        AccountDao dao = new AccountDao(connectionSource, accountDao);
-        accountDao.create(new Account("acc-1", "savings", 0.0));
-        accountDao.create(new Account("acc-2", "savings", 0.0));
-        Account acc1 = dao.getAccountForId(1);
-        Account acc2 = dao.getAccountForId(2);
-
-        assertEquals("acc-1", acc1.getDescription());
-        assertEquals("acc-2", acc2.getDescription());
-        assertEquals(0.0, acc1.getBalance(), 0.0);
-        assertEquals(000.0, acc2.getBalance(), 0.0);
-
-        dao.transfer(acc1, acc2, 100);
+        dao.updateAccount(accountDao.queryForId(1), 10);
+        assertEquals(210.0, accountDao.queryForId(1).getBalance(), 0.0);
     }
 
     @Test

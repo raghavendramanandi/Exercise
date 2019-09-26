@@ -34,25 +34,6 @@ public class AccountDao {
         accountDao.create(account);
     }
 
-    public void transfer(Account fromAccount, Account toAccount, double amount) throws Exception {
-//        TransactionManager transactionManager = new TransactionManager(connectionSource);
-//
-//        try {
-//            transactionManager.callInTransaction(() -> {
-//                Account reloadedFromAccount = getAccountForId(fromAccount.getId());
-//                Account reloadedToAccount = getAccountForId(toAccount.getId());
-//
-//                if(reloadedFromAccount.getBalance() < amount){
-//                    throw new InsufficientBalanceException("Insufficient funds");
-//                }
-//                updateAccount(reloadedFromAccount, debit(amount));
-//                updateAccount(reloadedToAccount, credit(amount));
-//                return true;
-//            });
-//        } finally {
-//        }
-    }
-
     public void updateAccount(Account account, double amount) throws SQLException {
         UpdateBuilder<Account, Integer> accountUb = accountDao.updateBuilder();
         accountUb.where().eq(Account.ACC_ID, account.getId());

@@ -1,13 +1,13 @@
 import exceptions.ApplicationException;
-import service.BankServiceImpl;
+import service.BankService;
 
 public class BankSingleton {
     private BankSingleton() {
     }
 
-    private static BankServiceImpl bankService;
+    private static BankService bankService;
 
-    public static BankServiceImpl getInstance() throws Exception, ApplicationException {
+    public static BankService getInstance() throws Exception, ApplicationException {
         if(bankService == null){
             synchronized (BankSingleton.class) {
                 if(bankService == null){

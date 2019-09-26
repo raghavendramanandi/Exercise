@@ -8,6 +8,7 @@ import model.UserAccount;
 import repository.AccountDao;
 import repository.UserAccountDao;
 import repository.UserDao;
+import service.BankService;
 import service.BankServiceImpl;
 import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
@@ -16,7 +17,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class BankServiceBuilder {
-    public BankServiceImpl build(String applicationPropertiesfile) throws ApplicationException, Exception {
+    public BankService build(String applicationPropertiesfile) throws ApplicationException, Exception {
         Properties prop = new Properties();
         InputStream input = Application.class.getClassLoader().getResourceAsStream(applicationPropertiesfile);
         if (input == null) {

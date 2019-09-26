@@ -53,9 +53,11 @@ public class ConstantStringHandler implements HttpHandler {
                     output = "Ready to server";
                     break;
             }
-        }catch (Exception | ApplicationException | InvalidUserException | InvalidTypeForAccountException |
-                InvalidDescriptionForAccountException | InvalidUsernameForAccountException |
-                SameFromAndToAccountException | InvalidAmountException | PostRequestBodyCannotBeEmptyException e){
+        }catch (Exception | ApplicationException | InvalidUserException |
+                InvalidTypeForAccountException | InvalidDescriptionForAccountException |
+                InvalidUsernameForAccountException | SameFromAndToAccountException |
+                InvalidAmountException | PostRequestBodyCannotBeEmptyException |
+                UserDoesNotOwnTheAccountToTransfer e){
             StringBuilder errorMessage = new StringBuilder();
             errorMessage.append("Error, Please contact admin for more details");
             errorMessage.append("\n");

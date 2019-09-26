@@ -36,7 +36,7 @@ public class TransactionRequestValidator{
         Stream<Integer> integerStream = usersForAccount.stream().map(userAccount -> userAccount.getUser().getId());
         boolean validUser = integerStream.anyMatch(is -> integerStream1.anyMatch(is1 -> is == is1));
         if(!validUser){
-            throw new UserDoesNotOwnTheAccountToTransfer("User doesnot own the account to transfer");
+            throw new UserDoesNotOwnTheAccountToTransfer("User does not own the account to transfer");
         }
     }
 
