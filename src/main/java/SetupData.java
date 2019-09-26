@@ -54,7 +54,7 @@ public class SetupData/*Taken from examples h2*/ {
         User user1 = new User("Jim Coakley");
         userDao.create(user1);
 
-        Account account1 = new Account("Jim's simple account", "savings", 0.0);
+        Account account1 = new Account("Jim's simple account", "savings", 1000.0);
         accountDao.create(account1);
 
         UserAccount userAccount1 = new UserAccount(user1, account1);

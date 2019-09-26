@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="8" failures="0" name="repository.AccountDaoTest" time="0.09" errors="0" skipped="0">
+<testsuite tests="6" failures="0" name="repository.AccountDaoTest" time="0.067" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="11.0.4+10-LTS"/>
@@ -64,12 +64,10 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="repository.AccountDaoTest" name="shouldReturnTheAccountWhenTheAccountExists" time="0.007"/>
-  <testcase classname="repository.AccountDaoTest" name="shouldThrowExceptionWhenTheAccountDoesNotExists" time="0.004"/>
-  <testcase classname="repository.AccountDaoTest" name="shouldBeAbleToCreateAccountForValidDescription" time="0.005"/>
+  <testcase classname="repository.AccountDaoTest" name="shouldReturnTheAccountWhenTheAccountExists" time="0.006"/>
+  <testcase classname="repository.AccountDaoTest" name="shouldThrowExceptionWhenTheAccountDoesNotExists" time="0.005"/>
+  <testcase classname="repository.AccountDaoTest" name="shouldBeAbleToCreateAccountForValidDescription" time="0.006"/>
   <testcase classname="repository.AccountDaoTest" name="shouldListAllAccounts" time="0.005"/>
-  <testcase classname="repository.AccountDaoTest" name="shouldNotBeAbleToCreateAccountIfDescriptionIsDuplicate" time="0.043"/>
-  <testcase classname="repository.AccountDaoTest" name="shouldBeAbleToTransferFromOneAccountToAnotherIfFundIsAvailable" time="0.016"/>
-  <testcase classname="repository.AccountDaoTest" name="shouldNotBeAbleToCreateAccountIfDescriptionIsnull" time="0.004"/>
-  <testcase classname="repository.AccountDaoTest" name="shouldThrowExceptionIfFundsAreNotAvailable" time="0.006"/>
+  <testcase classname="repository.AccountDaoTest" name="shouldNotBeAbleToCreateAccountIfDescriptionIsDuplicate" time="0.042"/>
+  <testcase classname="repository.AccountDaoTest" name="shouldNotBeAbleToCreateAccountIfDescriptionIsnull" time="0.003"/>
 </testsuite>

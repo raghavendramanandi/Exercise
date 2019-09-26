@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface BankService {
     // Add user
-    public CreateUserResponse createUser(CreateUserRequest createUserRequest);
+    public void createUser(CreateUserRequest createUserRequest);
     // Add Account
-    public CreateAccountResponse createAccount(CreateAccountRequest createAccountRequest);
+    public void createAccount(CreateAccountRequest createAccountRequest);
     // User summery
     public List<User> getAllUsers();
     // Account summery

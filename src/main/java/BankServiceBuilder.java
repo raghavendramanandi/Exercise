@@ -6,8 +6,10 @@ import model.Account;
 import model.User;
 import model.UserAccount;
 import repository.AccountDao;
+import repository.UserAccountDao;
 import repository.UserDao;
 import service.BankServiceImpl;
+import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
 
 import java.io.InputStream;
@@ -40,6 +42,9 @@ public class BankServiceBuilder {
         return new BankServiceImpl(
                 new AccountDao(connectionSource, accountDao),
                 new UserDao(userDao),
-                new TransactionRequestValidator());
+                new TransactionRequestValidator(),
+                new CreateAccountValidator(),
+                connectionSource,
+                new UserAccountDao(userAccountDao));
     }
 }

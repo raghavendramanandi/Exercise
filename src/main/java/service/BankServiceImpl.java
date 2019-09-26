@@ -1,16 +1,18 @@
 package service;
 
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.misc.TransactionManager;
 import enums.Status;
-import exceptions.InvalidAmountException;
-import exceptions.InvalidUserException;
-import exceptions.SameFromAndToAccountException;
+import exceptions.*;
 import model.Account;
 import model.Request.CreateAccountRequest;
 import model.Request.CreateUserRequest;
 import model.Request.TransferRequest;
 import model.Response.TransactionResponse;
 import model.User;
+import model.UserAccount;
 import repository.AccountDao;
+import repository.UserAccountDao;
 import repository.UserDao;
 import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
@@ -23,24 +25,45 @@ public class BankServiceImpl {
     private UserDao userDao;
     private TransactionRequestValidator transactionRequestValidator;
     private CreateAccountValidator createAccountValidator;
+    private JdbcConnectionSource connectionSource;
+    private UserAccountDao userAccountDao;
 
     public BankServiceImpl(AccountDao accountDao, UserDao userDao
-            , TransactionRequestValidator transactionRequestValidator, CreateAccountValidator createAccountValidator) {
+            , TransactionRequestValidator transactionRequestValidator, CreateAccountValidator createAccountValidator
+    , JdbcConnectionSource connectionSource, UserAccountDao userAccountDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.transactionRequestValidator = transactionRequestValidator;
         this.createAccountValidator = createAccountValidator;
+        this.connectionSource = connectionSource;
+        this.userAccountDao = userAccountDao;
     }
 
     public void createUser(CreateUserRequest createUserRequest) throws Exception {
         userDao.createUser(new User(createUserRequest.getUserName()));
     }
 
-    public void createAccount(CreateAccountRequest createAccountRequest) throws SQLException {
+    public void createAccount(CreateAccountRequest createAccountRequest) throws Exception, InvalidUserException, InvalidTypeForAccountException, InvalidDescriptionForAccountException, InvalidUsernameForAccountException {
         createAccountValidator.validate(createAccountRequest, userDao);
-        accountDao.createAccount(new Account(
-                createAccountRequest.getDescription(),
-                createAccountRequest.getType(), 0.0));
+        /*
+        * validation need not be inside transaction as if when checked, if the user does not exist an exception will be thrown.
+        * If the user is already there, since we are not modifying user table it is fine
+        */
+        TransactionManager transactionManager = new TransactionManager(connectionSource);
+        try {
+            transactionManager.callInTransaction(() -> {
+                accountDao.createAccount(new Account(
+                        createAccountRequest.getDescription(),
+                        createAccountRequest.getType(), 0.0));
+                userAccountDao.createUserAccount(
+                        new UserAccount(
+                                userDao.selectUsersForName(createAccountRequest.getUsername()).get(0),
+                                accountDao.getAccountForDescription(createAccountRequest.getDescription()
+                                )));
+                return true;
+            });
+        }finally {
+        }
     }
 
     public List<User> getAllUsers() throws Exception {
@@ -51,13 +74,41 @@ public class BankServiceImpl {
         return accountDao.getAllAccounts();
     }
 
-    public TransactionResponse transfer(TransferRequest transferRequest) throws Exception, SameFromAndToAccountException, InvalidUserException, InvalidAmountException {
+    public TransactionResponse transfer(TransferRequest transferRequest)
+            throws Exception, SameFromAndToAccountException, InvalidUserException, InvalidAmountException {
         transactionRequestValidator.validate(transferRequest, userDao);
-        accountDao.transfer(
-                accountDao.getAccountForId(transferRequest.getFromAccountId()),
-                accountDao.getAccountForId(transferRequest.getToAccountId()),
-                transferRequest.getAmount()
-        );
+//        accountDao.transfer(
+//                accountDao.getAccountForId(transferRequest.getFromAccountId()),
+//                accountDao.getAccountForId(transferRequest.getToAccountId()),
+//                transferRequest.getAmount()
+//        );
+        TransactionManager transactionManager = new TransactionManager(connectionSource);
+        try {
+            transactionManager.callInTransaction(() -> {
+                Account fromAccount = accountDao.getAccountForId(transferRequest.getFromAccountId());
+                Account toAccount = accountDao.getAccountForId(transferRequest.getToAccountId());
+
+                if(fromAccount.getBalance() < transferRequest.getAmount()){
+                    throw new InsufficientBalanceException("Insufficient funds");
+                }
+                accountDao.updateAccount(fromAccount, debit(transferRequest.getAmount()));
+                accountDao.updateAccount(toAccount, credit(transferRequest.getAmount()));
+                return true;
+            });
+        } finally {
+        }
         return new TransactionResponse(Status.OK);
+    }
+
+    private double credit(double amount) {
+        return amount;
+    }
+
+    private double debit(double amount) {
+        return amount*-1;
+    }
+
+    public List<UserAccount> getAllUserAccount() throws SQLException {
+        return userAccountDao.getAllUserAccounts();
     }
 }

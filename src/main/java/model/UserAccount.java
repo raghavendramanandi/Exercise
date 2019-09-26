@@ -23,4 +23,13 @@ public class UserAccount {
         this.user = user;
         this.account = account;
     }
+
+    @Override
+    public String toString() {
+        return "UserAccount{" +
+                "id=" + id +
+                ", user=" + user.getId() +
+                ", account=" + account.getId() +
+                '}';
+    }
 }
