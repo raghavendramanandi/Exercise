@@ -3,15 +3,19 @@ package validator;
 import exceptions.InvalidAmountException;
 import exceptions.InvalidUserException;
 import exceptions.SameFromAndToAccountException;
+import exceptions.UserDoesNotOwnTheAccountToTransfer;
 import model.Request.TransferRequest;
 import model.User;
+import model.UserAccount;
+import repository.UserAccountDao;
 import repository.UserDao;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class TransactionRequestValidator{
-    public void validate(TransferRequest transferRequest, UserDao userDao) throws InvalidAmountException, SameFromAndToAccountException, InvalidUserException, Exception {
-        if(transferRequest.getAmount() < 0){
+    public void validate(TransferRequest transferRequest, UserDao userDao, UserAccountDao userAccountDao) throws InvalidAmountException, SameFromAndToAccountException, InvalidUserException, Exception, UserDoesNotOwnTheAccountToTransfer {
+        if(transferRequest.getAmount() < 1){
             throw new InvalidAmountException(String.format("Amount cannot be %s", transferRequest.getAmount()));
         }
 
@@ -26,7 +30,14 @@ public class TransactionRequestValidator{
             throw new InvalidUserException(String.format("User with user name %s does not exist", transferRequest.getUserName()));
         }
 
-        //TODO Validate if the user who is transfering owns the account
+        List<UserAccount> usersForAccount = userAccountDao.getUsersForAccount(transferRequest.getFromAccountId());
+        List<User> users = userDao.selectUsersForName(transferRequest.getUserName());
+        Stream<Integer> integerStream1 = users.stream().map(user -> user.getId());
+        Stream<Integer> integerStream = usersForAccount.stream().map(userAccount -> userAccount.getUser().getId());
+        boolean validUser = integerStream.anyMatch(is -> integerStream1.anyMatch(is1 -> is == is1));
+        if(!validUser){
+            throw new UserDoesNotOwnTheAccountToTransfer("User doesnot own the account to transfer");
+        }
     }
 
     private boolean isNotAValidUser(String userName, UserDao userDao) throws Exception {

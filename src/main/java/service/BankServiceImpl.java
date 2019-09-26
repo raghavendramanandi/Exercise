@@ -75,7 +75,7 @@ public class BankServiceImpl {
 
     public void transfer(TransferRequest transferRequest)
             throws Exception, SameFromAndToAccountException, InvalidUserException, InvalidAmountException {
-        transactionRequestValidator.validate(transferRequest, userDao);
+        transactionRequestValidator.validate(transferRequest, userDao, userAccountDao);
         double amount = Util.round(transferRequest.getAmount());
         TransactionManager transactionManager = new TransactionManager(connectionSource);
         try {

@@ -24,6 +24,14 @@ public class UserAccount {
         this.account = account;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
     @Override
     public String toString() {
         return "UserAccount{" +
