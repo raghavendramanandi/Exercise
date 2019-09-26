@@ -6,7 +6,7 @@ public class Routes {
     public static final HttpHandler ROUTES = new BlockingHandler( new RoutingHandler()
             .get("/allUsers", RoutingHandlers.constantStringHandler("allUsers"))
             .get("/exception", RoutingHandlers.constantStringHandler("exception"))
-            .get("/myRoute", RoutingHandlers.constantStringHandler("GET - My Route"))
+            .get("/createAccount", RoutingHandlers.constantStringHandler("createAccount"))
             .post("/createUser", RoutingHandlers.constantStringHandler("createUser"))
             .get("/myOtherRoute", RoutingHandlers.constantStringHandler("GET - My Other Route"))
             // Wildcards and RoutingHandler had some bugs before version 1.4.8.Final

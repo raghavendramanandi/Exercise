@@ -8,12 +8,11 @@ import model.Account;
 import model.Request.CreateAccountRequest;
 import model.Request.CreateUserRequest;
 import model.Request.TransferRequest;
-import model.Response.CreateAccountResponse;
-import model.Response.CreateUserResponse;
 import model.Response.TransactionResponse;
 import model.User;
 import repository.AccountDao;
 import repository.UserDao;
+import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
 
 import java.sql.SQLException;
@@ -23,20 +22,25 @@ public class BankServiceImpl {
     private AccountDao accountDao;
     private UserDao userDao;
     private TransactionRequestValidator transactionRequestValidator;
+    private CreateAccountValidator createAccountValidator;
 
-    public BankServiceImpl(AccountDao accountDao, UserDao userDao, TransactionRequestValidator transactionRequestValidator) {
+    public BankServiceImpl(AccountDao accountDao, UserDao userDao
+            , TransactionRequestValidator transactionRequestValidator, CreateAccountValidator createAccountValidator) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.transactionRequestValidator = transactionRequestValidator;
+        this.createAccountValidator = createAccountValidator;
     }
 
-    public CreateUserResponse createUser(CreateUserRequest createUserRequest) throws Exception {
+    public void createUser(CreateUserRequest createUserRequest) throws Exception {
         userDao.createUser(new User(createUserRequest.getUserName()));
-        return new CreateUserResponse(Status.OK);
     }
 
-    public CreateAccountResponse createAccount(CreateAccountRequest createAccountRequest) {
-        return null;
+    public void createAccount(CreateAccountRequest createAccountRequest) throws SQLException {
+        createAccountValidator.validate(createAccountRequest, userDao);
+        accountDao.createAccount(new Account(
+                createAccountRequest.getDescription(),
+                createAccountRequest.getType(), 0.0));
     }
 
     public List<User> getAllUsers() throws Exception {

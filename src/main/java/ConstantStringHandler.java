@@ -3,6 +3,7 @@ import exceptions.ApplicationException;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
+import model.Request.CreateAccountRequest;
 import model.Request.CreateUserRequest;
 
 import java.io.BufferedReader;
@@ -21,13 +22,18 @@ public class ConstantStringHandler implements HttpHandler {
 
     public void handleRequest(HttpServerExchange exchange) {
         ObjectMapper mapper = new ObjectMapper();
+        String body;
         try{
             switch (value){
                 case "allUsers":
                     output = Arrays.toString(BankSingleton.getInstance().getAllUsers().toArray());
                     break;
+                case "createAccount":
+                    body = getBodyFromExchange(exchange);
+                    BankSingleton.getInstance().createAccount(mapper.readValue(body, CreateAccountRequest.class));
+                    break;
                 case "createUser":
-                    String body = getBodyFromExchange(exchange);
+                    body = getBodyFromExchange(exchange);
                     BankSingleton.getInstance().createUser(mapper.readValue(body, CreateUserRequest.class));
                     output = SUCCESS;
                     break;
