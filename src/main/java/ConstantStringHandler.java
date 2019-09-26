@@ -14,11 +14,12 @@ public class ConstantStringHandler implements HttpHandler {
     private final String value;
     private static final String SUCCESS = "Success";
     private String output;
+
     public ConstantStringHandler(String value) {
         this.value = value;
     }
 
-    public void handleRequest(HttpServerExchange exchange) throws Exception {
+    public void handleRequest(HttpServerExchange exchange) {
         ObjectMapper mapper = new ObjectMapper();
         try{
             switch (value){
