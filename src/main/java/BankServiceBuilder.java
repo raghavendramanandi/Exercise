@@ -41,7 +41,7 @@ public class BankServiceBuilder {
         setupData.readWriteData();
 
         return new BankServiceImpl(
-                new AccountRepository(connectionSource, accountDao),
+                new AccountRepository(accountDao),
                 new UserRepository(userDao),
                 new TransactionRequestValidator(),
                 new CreateAccountValidator(),

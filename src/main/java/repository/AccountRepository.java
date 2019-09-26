@@ -1,7 +1,6 @@
 package repository;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import model.Account;
 
@@ -12,11 +11,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class AccountRepository {
-    private JdbcConnectionSource connectionSource;
     private Dao<Account, Integer> accountDao;
 
-    public AccountRepository(JdbcConnectionSource connectionSource, Dao<Account, Integer> accountDao) {
-        this.connectionSource = connectionSource;
+    public AccountRepository(Dao<Account, Integer> accountDao) {
         this.accountDao = accountDao;
     }
 

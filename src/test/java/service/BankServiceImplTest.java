@@ -48,7 +48,7 @@ public class BankServiceImplTest {
         userAccountDao = DaoManager.createDao(connectionSource, UserAccount.class);
         transactionRequestValidator = new TransactionRequestValidator();
         createAccountValidator = new CreateAccountValidator();
-        bankService = new BankServiceImpl(new AccountRepository(connectionSource, accountDao), new UserRepository(userDao),
+        bankService = new BankServiceImpl(new AccountRepository(accountDao), new UserRepository(userDao),
                 transactionRequestValidator, createAccountValidator, connectionSource, new UserAccountRepository(userAccountDao));
     }
 
