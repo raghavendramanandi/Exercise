@@ -15,8 +15,8 @@ import model.UserAccount;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import repository.UserAccountDao;
-import repository.UserDao;
+import repository.UserAccountRepository;
+import repository.UserRepository;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -63,7 +63,7 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,2,0.20, "u1");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 
     @Test(expected = SameFromAndToAccountException.class)
@@ -82,7 +82,7 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,1,10.00, "u1");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 
     @Test(expected = InvalidUserException.class)
@@ -101,7 +101,7 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,2,10.00, "u11");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 
     @Test(expected = UserDoesNotOwnTheAccountToTransfer.class)
@@ -120,7 +120,7 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,2,10.00, "u2");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,2,10.00, "u1");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,2,10.00, "u1");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 
     @Test
@@ -181,6 +181,6 @@ public class TransactionRequestValidatorTest {
         userAccountDao.create(new UserAccount(user2, toAccount));
 
         TransferRequest transferRequest =  new TransferRequest(1,2,10.00, "u1");
-        taTransactionRequestValidator.validate(transferRequest, new UserDao(userDao), new UserAccountDao(userAccountDao));
+        taTransactionRequestValidator.validate(transferRequest, new UserRepository(userDao), new UserAccountRepository(userAccountDao));
     }
 }

@@ -14,9 +14,9 @@ import model.UserAccount;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import repository.AccountDao;
-import repository.UserAccountDao;
-import repository.UserDao;
+import repository.AccountRepository;
+import repository.UserAccountRepository;
+import repository.UserRepository;
 import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
 
@@ -48,8 +48,8 @@ public class BankServiceImplTest {
         userAccountDao = DaoManager.createDao(connectionSource, UserAccount.class);
         transactionRequestValidator = new TransactionRequestValidator();
         createAccountValidator = new CreateAccountValidator();
-        bankService = new BankServiceImpl(new AccountDao(connectionSource, accountDao), new UserDao(userDao),
-                transactionRequestValidator, createAccountValidator, connectionSource, new UserAccountDao(userAccountDao));
+        bankService = new BankServiceImpl(new AccountRepository(connectionSource, accountDao), new UserRepository(userDao),
+                transactionRequestValidator, createAccountValidator, connectionSource, new UserAccountRepository(userAccountDao));
     }
 
     @After

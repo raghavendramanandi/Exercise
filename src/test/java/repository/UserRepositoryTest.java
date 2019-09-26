@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class UserDaoTest {
+public class UserRepositoryTest {
 
     private Dao<User, Integer> userDao;
     private JdbcConnectionSource connectionSource = null;
@@ -41,7 +41,7 @@ public class UserDaoTest {
         List<User> users;
         PreparedQuery<User> allUsers;
 
-        UserDao dao = new UserDao(userDao);
+        UserRepository dao = new UserRepository(userDao);
         dao.createUser(new User("mike"));
         QueryBuilder<User, Integer> userQb = userDao.queryBuilder();
         allUsers = userQb.prepare();
@@ -55,7 +55,7 @@ public class UserDaoTest {
         List<User> users;
         PreparedQuery<User> allUsers;
 
-        UserDao dao = new UserDao(userDao);
+        UserRepository dao = new UserRepository(userDao);
         dao.createUser(new User(null));
         QueryBuilder<User, Integer> userQb = userDao.queryBuilder();
         allUsers = userQb.prepare();
@@ -67,7 +67,7 @@ public class UserDaoTest {
     @Test
     public void shouldListAllMatchingUsersWhenSomeAreMatchingTheName() throws Exception {
         List<User> users;
-        UserDao dao = new UserDao(userDao);
+        UserRepository dao = new UserRepository(userDao);
         userDao.create(new User("mike"));
         userDao.create(new User("mike1"));
         users = dao.selectUsersForName("mike");
@@ -78,7 +78,7 @@ public class UserDaoTest {
     @Test
     public void shouldListEmptyUsersWhenNoneAreMatchingTheName() throws Exception {
         List<User> users;
-        UserDao dao = new UserDao(userDao);
+        UserRepository dao = new UserRepository(userDao);
         userDao.create(new User("mike"));
         userDao.create(new User("mike1"));
         users = dao.selectUsersForName("mike2");
@@ -88,7 +88,7 @@ public class UserDaoTest {
     @Test
     public void shouldListAllUsersWhenUsersAreProvided() throws Exception {
         List<User> users;
-        UserDao dao = new UserDao(userDao);
+        UserRepository dao = new UserRepository(userDao);
         userDao.create(new User("mike"));
         users = dao.selectAllUsers();
         assertEquals(1, users.size());
@@ -98,7 +98,7 @@ public class UserDaoTest {
     @Test
     public void shouldListEmptyUsersWhenNoUsersAreProvided() throws Exception {
         List<User> users;
-        UserDao dao = new UserDao(userDao);
+        UserRepository dao = new UserRepository(userDao);
         users = dao.selectAllUsers();
         assertEquals(0, users.size());
     }

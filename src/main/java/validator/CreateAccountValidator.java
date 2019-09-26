@@ -6,12 +6,12 @@ import exceptions.InvalidUserException;
 import exceptions.InvalidUsernameForAccountException;
 import model.Request.CreateAccountRequest;
 import model.User;
-import repository.UserDao;
+import repository.UserRepository;
 
 import java.util.List;
 
 public class CreateAccountValidator {
-    public void validate(CreateAccountRequest createAccountRequest, UserDao userDao) throws InvalidUserException, Exception, InvalidUsernameForAccountException, InvalidTypeForAccountException, InvalidDescriptionForAccountException {
+    public void validate(CreateAccountRequest createAccountRequest, UserRepository userRepository) throws InvalidUserException, Exception, InvalidUsernameForAccountException, InvalidTypeForAccountException, InvalidDescriptionForAccountException {
         if(createAccountRequest.getDescription() == null || createAccountRequest.getDescription().length() == 0){
             throw new InvalidDescriptionForAccountException("Invalid description");
         }
@@ -24,13 +24,13 @@ public class CreateAccountValidator {
             throw new InvalidUsernameForAccountException("Invalid username");
         }
 
-        if(isNotAValidUser(createAccountRequest.getUsername(), userDao)){
+        if(isNotAValidUser(createAccountRequest.getUsername(), userRepository)){
             throw new InvalidUserException(String.format("User with user name %s does not exist", createAccountRequest.getUsername()));
         }
     }
 
-    private boolean isNotAValidUser(String userName, UserDao userDao) throws Exception {
-        List<User> users = userDao.selectUsersForName(userName);
+    private boolean isNotAValidUser(String userName, UserRepository userRepository) throws Exception {
+        List<User> users = userRepository.selectUsersForName(userName);
         return users.size() != 1;
     }
 }

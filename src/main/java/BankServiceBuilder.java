@@ -5,9 +5,9 @@ import exceptions.ApplicationException;
 import model.Account;
 import model.User;
 import model.UserAccount;
-import repository.AccountDao;
-import repository.UserAccountDao;
-import repository.UserDao;
+import repository.AccountRepository;
+import repository.UserAccountRepository;
+import repository.UserRepository;
 import service.BankService;
 import service.BankServiceImpl;
 import validator.CreateAccountValidator;
@@ -41,11 +41,11 @@ public class BankServiceBuilder {
         setupData.readWriteData();
 
         return new BankServiceImpl(
-                new AccountDao(connectionSource, accountDao),
-                new UserDao(userDao),
+                new AccountRepository(connectionSource, accountDao),
+                new UserRepository(userDao),
                 new TransactionRequestValidator(),
                 new CreateAccountValidator(),
                 connectionSource,
-                new UserAccountDao(userAccountDao));
+                new UserAccountRepository(userAccountDao));
     }
 }

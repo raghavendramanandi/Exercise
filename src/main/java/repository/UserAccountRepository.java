@@ -6,10 +6,10 @@ import model.UserAccount;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserAccountDao {
+public class UserAccountRepository {
     private Dao<UserAccount, Integer> userAccountDao;
 
-    public UserAccountDao(Dao<UserAccount, Integer> userAccountDao) {
+    public UserAccountRepository(Dao<UserAccount, Integer> userAccountDao) {
         this.userAccountDao = userAccountDao;
     }
 

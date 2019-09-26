@@ -10,11 +10,11 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class AccountDao {
+public class AccountRepository {
     private JdbcConnectionSource connectionSource;
     private Dao<Account, Integer> accountDao;
 
-    public AccountDao(JdbcConnectionSource connectionSource, Dao<Account, Integer> accountDao) {
+    public AccountRepository(JdbcConnectionSource connectionSource, Dao<Account, Integer> accountDao) {
         this.connectionSource = connectionSource;
         this.accountDao = accountDao;
     }

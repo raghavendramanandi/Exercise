@@ -9,9 +9,9 @@ import model.Request.CreateUserRequest;
 import model.Request.TransferRequest;
 import model.User;
 import model.UserAccount;
-import repository.AccountDao;
-import repository.UserAccountDao;
-import repository.UserDao;
+import repository.AccountRepository;
+import repository.UserAccountRepository;
+import repository.UserRepository;
 import utils.Util;
 import validator.CreateAccountValidator;
 import validator.TransactionRequestValidator;
@@ -20,31 +20,31 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class BankServiceImpl implements BankService{
-    private AccountDao accountDao;
-    private UserDao userDao;
+    private AccountRepository accountRepository;
+    private UserRepository userRepository;
     private TransactionRequestValidator transactionRequestValidator;
     private CreateAccountValidator createAccountValidator;
     private JdbcConnectionSource connectionSource;
-    private UserAccountDao userAccountDao;
+    private UserAccountRepository userAccountRepository;
 
-    public BankServiceImpl(AccountDao accountDao, UserDao userDao
+    public BankServiceImpl(AccountRepository accountRepository, UserRepository userRepository
             , TransactionRequestValidator transactionRequestValidator, CreateAccountValidator createAccountValidator
-    , JdbcConnectionSource connectionSource, UserAccountDao userAccountDao) {
-        this.accountDao = accountDao;
-        this.userDao = userDao;
+    , JdbcConnectionSource connectionSource, UserAccountRepository userAccountRepository) {
+        this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
         this.transactionRequestValidator = transactionRequestValidator;
         this.createAccountValidator = createAccountValidator;
         this.connectionSource = connectionSource;
-        this.userAccountDao = userAccountDao;
+        this.userAccountRepository = userAccountRepository;
     }
 
     public void createUser(CreateUserRequest createUserRequest) throws Exception {
-        userDao.createUser(new User(createUserRequest.getUserName()));
+        userRepository.createUser(new User(createUserRequest.getUserName()));
     }
 
     public void createAccount(CreateAccountRequest createAccountRequest) throws Exception, InvalidUserException,
             InvalidTypeForAccountException, InvalidDescriptionForAccountException, InvalidUsernameForAccountException {
-        createAccountValidator.validate(createAccountRequest, userDao);
+        createAccountValidator.validate(createAccountRequest, userRepository);
         /*
         * validation need not be inside transaction as if when checked, if the user does not exist an exception will be thrown.
         * If the user is already there, since we are not modifying user table it is fine
@@ -52,13 +52,13 @@ public class BankServiceImpl implements BankService{
         TransactionManager transactionManager = new TransactionManager(connectionSource);
         try {
             transactionManager.callInTransaction(() -> {
-                accountDao.createAccount(new Account(
+                accountRepository.createAccount(new Account(
                         createAccountRequest.getDescription(),
                         createAccountRequest.getType(), 0.0));
-                userAccountDao.createUserAccount(
+                userAccountRepository.createUserAccount(
                         new UserAccount(
-                                userDao.selectUsersForName(createAccountRequest.getUsername()).get(0),
-                                accountDao.getAccountForDescription(createAccountRequest.getDescription()
+                                userRepository.selectUsersForName(createAccountRequest.getUsername()).get(0),
+                                accountRepository.getAccountForDescription(createAccountRequest.getDescription()
                                 )));
                 return true;
             });
@@ -67,29 +67,29 @@ public class BankServiceImpl implements BankService{
     }
 
     public List<User> getAllUsers() throws Exception {
-        return userDao.selectAllUsers();
+        return userRepository.selectAllUsers();
     }
 
     public List<Account> getAllAccounts() throws SQLException {
-        return accountDao.getAllAccounts();
+        return accountRepository.getAllAccounts();
     }
 
     public void transfer(TransferRequest transferRequest)
             throws Exception, SameFromAndToAccountException, InvalidUserException,
             InvalidAmountException, UserDoesNotOwnTheAccountToTransfer {
-        transactionRequestValidator.validate(transferRequest, userDao, userAccountDao);
+        transactionRequestValidator.validate(transferRequest, userRepository, userAccountRepository);
         double amount = Util.round(transferRequest.getAmount());
         TransactionManager transactionManager = new TransactionManager(connectionSource);
         try {
             transactionManager.callInTransaction(() -> {
-                Account fromAccount = accountDao.getAccountForId(transferRequest.getFromAccountId());
-                Account toAccount = accountDao.getAccountForId(transferRequest.getToAccountId());
+                Account fromAccount = accountRepository.getAccountForId(transferRequest.getFromAccountId());
+                Account toAccount = accountRepository.getAccountForId(transferRequest.getToAccountId());
 
                 if(fromAccount.getBalance() < amount){
                     throw new InsufficientBalanceException("Insufficient funds");
                 }
-                accountDao.updateAccount(fromAccount, debit(amount));
-                accountDao.updateAccount(toAccount, credit(amount));
+                accountRepository.updateAccount(fromAccount, debit(amount));
+                accountRepository.updateAccount(toAccount, credit(amount));
                 return true;
             });
         } finally {
@@ -97,7 +97,7 @@ public class BankServiceImpl implements BankService{
     }
 
     public List<UserAccount> getAllUserAccount() throws SQLException {
-        return userAccountDao.getAllUserAccounts();
+        return userAccountRepository.getAllUserAccounts();
     }
 
     private double credit(double amount) {

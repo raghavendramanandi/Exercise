@@ -7,14 +7,14 @@ import exceptions.UserDoesNotOwnTheAccountToTransfer;
 import model.Request.TransferRequest;
 import model.User;
 import model.UserAccount;
-import repository.UserAccountDao;
-import repository.UserDao;
+import repository.UserAccountRepository;
+import repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 public class TransactionRequestValidator{
-    public void validate(TransferRequest transferRequest, UserDao userDao, UserAccountDao userAccountDao) throws InvalidAmountException, SameFromAndToAccountException, InvalidUserException, Exception, UserDoesNotOwnTheAccountToTransfer {
+    public void validate(TransferRequest transferRequest, UserRepository userRepository, UserAccountRepository userAccountRepository) throws InvalidAmountException, SameFromAndToAccountException, InvalidUserException, Exception, UserDoesNotOwnTheAccountToTransfer {
         if(transferRequest.getAmount() < 1){
             throw new InvalidAmountException(String.format("Amount cannot be %s", transferRequest.getAmount()));
         }
@@ -26,12 +26,12 @@ public class TransactionRequestValidator{
                             transferRequest.getToAccountId()));
         }
 
-        if(isNotAValidUser(transferRequest.getUserName(), userDao)){
+        if(isNotAValidUser(transferRequest.getUserName(), userRepository)){
             throw new InvalidUserException(String.format("User with user name %s does not exist", transferRequest.getUserName()));
         }
 
-        List<UserAccount> usersForAccount = userAccountDao.getUsersForAccount(transferRequest.getFromAccountId());
-        List<User> users = userDao.selectUsersForName(transferRequest.getUserName());
+        List<UserAccount> usersForAccount = userAccountRepository.getUsersForAccount(transferRequest.getFromAccountId());
+        List<User> users = userRepository.selectUsersForName(transferRequest.getUserName());
         Stream<Integer> integerStream1 = users.stream().map(user -> user.getId());
         Stream<Integer> integerStream = usersForAccount.stream().map(userAccount -> userAccount.getUser().getId());
         boolean validUser = integerStream.anyMatch(is -> integerStream1.anyMatch(is1 -> is == is1));
@@ -40,8 +40,8 @@ public class TransactionRequestValidator{
         }
     }
 
-    private boolean isNotAValidUser(String userName, UserDao userDao) throws Exception {
-        List<User> users = userDao.selectUsersForName(userName);
+    private boolean isNotAValidUser(String userName, UserRepository userRepository) throws Exception {
+        List<User> users = userRepository.selectUsersForName(userName);
         return users.size() != 1;
     }
 }

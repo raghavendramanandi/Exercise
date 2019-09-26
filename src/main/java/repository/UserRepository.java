@@ -9,13 +9,13 @@ import model.User;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserDao {
+public class UserRepository {
 
     private Dao<User, Integer> userDao;
     private PreparedQuery<User> userForName = null;
     private PreparedQuery<User> allUsers = null;
 
-    public UserDao(Dao<User, Integer> userDao) {
+    public UserRepository(Dao<User, Integer> userDao) {
         this.userDao = userDao;
     }
 
