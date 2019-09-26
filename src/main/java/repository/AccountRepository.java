@@ -6,6 +6,7 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import model.Account;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -38,6 +39,7 @@ public class AccountRepository {
         UpdateBuilder<Account, Integer> accountUb = accountDao.updateBuilder();
         accountUb.where().eq(Account.ACC_ID, account.getId());
         accountUb.updateColumnValue(Account.ACC_BALANCE, account.getBalance() + amount);
+        accountUb.updateColumnValue(Account.ACC_MDT, new Date(System.currentTimeMillis()));
         accountUb.update();
     }
 

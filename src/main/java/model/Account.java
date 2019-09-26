@@ -14,6 +14,7 @@ public class Account {
     public final static String ACC_DESC = "description";
     public final static String ACC_TYPE = "type";
     public final static String ACC_BALANCE = "balance";
+    public final static String ACC_MDT = "modified_date_time";
 
 
     @DatabaseField(columnName = ACC_ID, generatedId = true)
@@ -28,7 +29,7 @@ public class Account {
     @DatabaseField(columnName = ACC_BALANCE, canBeNull = false)
     private Double balance;
 
-    @DatabaseField(columnName = "modified_date_time", canBeNull = false)
+    @DatabaseField(columnName = ACC_MDT, canBeNull = false)
     private Date MDT;
 
     @DatabaseField(columnName = "created_date_time", canBeNull = false)
