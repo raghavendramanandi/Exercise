@@ -14,9 +14,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class BankServiceBuilder {
-    public BankServiceImpl build() throws ApplicationException, Exception {
+    public BankServiceImpl build(String applicationPropertiesfile) throws ApplicationException, Exception {
         Properties prop = new Properties();
-        InputStream input = App2.class.getClassLoader().getResourceAsStream("application.properties");
+        InputStream input = Application.class.getClassLoader().getResourceAsStream(applicationPropertiesfile);
         if (input == null) {
             throw new ApplicationException("Issue while loading the properties");
         }

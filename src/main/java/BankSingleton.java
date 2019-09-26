@@ -11,7 +11,7 @@ public class BankSingleton {
         if(bankService == null){
             synchronized (BankSingleton.class) {
                 if(bankService == null){
-                    bankService = new BankServiceBuilder().build();
+                    bankService = new BankServiceBuilder().build("application.properties");
                 }
             }
         }

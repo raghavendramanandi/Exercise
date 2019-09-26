@@ -13,9 +13,8 @@ import model.UserAccount;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SetupData {
+public class SetupData/*Taken from examples h2*/ {
 
-    // we are using the in-memory H2 database
     private final static String DATABASE_URL = "jdbc:h2:mem:bank";
 
     private Dao<User, Integer> userDao;
@@ -30,15 +29,11 @@ public class SetupData {
     void doMain(String[] args) throws Exception {
         JdbcConnectionSource connectionSource = null;
         try {
-            // create our data-source for the database
             connectionSource = new JdbcConnectionSource(DATABASE_URL);
-            // setup our database and DAOs
             setupDatabase(connectionSource);
-            // read and write some data
             readWriteData();
             System.out.println("\n\nIt seems to have worked\n\n");
         } finally {
-            // destroy the data source which should close underlying connections
             if (connectionSource != null) {
                 connectionSource.close();
             }

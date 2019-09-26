@@ -36,7 +36,7 @@ public class ConstantStringHandler implements HttpHandler {
             }
         }catch (Exception | ApplicationException e){
             e.printStackTrace();
-            output = "error";
+            output = "Error, Please contact admin for more details";
         }
         exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
         exchange.setStatusCode(200);
