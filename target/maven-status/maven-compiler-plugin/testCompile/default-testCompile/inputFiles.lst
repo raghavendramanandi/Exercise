@@ -1,4 +1,6 @@
+/Users/rmramesh/repos/Trex/src/test/java/service/BankServiceImplTest.java
+/Users/rmramesh/repos/Trex/src/test/java/utils/UtilTest.java
+/Users/rmramesh/repos/Trex/src/test/java/repository/AccountRepositoryTest.java
+/Users/rmramesh/repos/Trex/src/test/java/validator/TransactionRequestValidatorTest.java
 /Users/rmramesh/repos/Trex/src/test/java/BankServiceBuilderTest.java
-/Users/rmramesh/repos/Trex/src/test/java/BankSingletonTest.java
-/Users/rmramesh/repos/Trex/src/test/java/repository/AccountDaoTest.java
-/Users/rmramesh/repos/Trex/src/test/java/repository/UserDaoTest.java
+/Users/rmramesh/repos/Trex/src/test/java/repository/UserRepositoryTest.java

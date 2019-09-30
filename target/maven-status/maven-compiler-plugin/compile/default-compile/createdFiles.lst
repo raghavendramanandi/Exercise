@@ -1,12 +1,9 @@
-model/Response/TransactionResponse.class
-repository/AccountDao.class
 validator/CreateAccountValidator.class
 model/Account.class
 exceptions/ApplicationException.class
 model/Request/CreateUserRequest.class
 exceptions/SameFromAndToAccountException.class
 service/BankServiceImpl.class
-repository/UserAccountDao.class
 Application.class
 exceptions/InsufficientBalanceException.class
 exceptions/InvalidAmountException.class
@@ -14,7 +11,6 @@ model/Request/TransferRequest.class
 validator/TransactionRequestValidator.class
 enums/Status.class
 service/BankService.class
-repository/UserDao.class
 SetupData.class
 exceptions/InvalidDescriptionForAccountException.class
 exceptions/InvalidUserException.class
@@ -24,5 +20,4 @@ model/Request/CreateAccountRequest.class
 exceptions/InvalidTypeForAccountException.class
 model/User.class
 model/UserAccount.class
-model/Response/Response.class
 exceptions/InvalidUsernameForAccountException.class

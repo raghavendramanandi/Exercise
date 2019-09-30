@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="2" failures="0" name="BankServiceBuilderTest" time="0.019" errors="0" skipped="0">
+<testsuite tests="7" failures="0" name="validator.TransactionRequestValidatorTest" time="0.058" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="11.0.4+10-LTS"/>
@@ -64,6 +64,11 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="BankServiceBuilderTest" name="shouldThrowExceptionIfPropertyFileIsNotAvailable" time="0.001"/>
-  <testcase classname="BankServiceBuilderTest" name="shouldBuildObjectOfTypeBankServiceIfValid" time="0.018"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldNotAllowTransferFormSameAccounts" time="0.007"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldPassValidationIfThereAreNoIssues" time="0.012"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldThrowInvalidAmountExceptionIfAmountIsLessThan1" time="0.007"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldBeAbleToTransferIfUserOwnsMoreThanOneAccountAndOwnsTheFromAccount" time="0.008"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldNotAllowTransferIfTheUserIsInvalid" time="0.007"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldNotBeAbleToTransferIfUserDoesNotOwnTheAccount" time="0.009"/>
+  <testcase classname="validator.TransactionRequestValidatorTest" name="shouldBeAbleToTransferIfFromAccountIsJointAccountAndOneOfTheUserIsTransferring" time="0.008"/>
 </testsuite>

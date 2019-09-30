@@ -74,7 +74,7 @@ public class BankServiceImpl implements BankService{
         return accountRepository.getAllAccounts();
     }
 
-    public void transfer(TransferRequest transferRequest)
+    public synchronized void transfer(TransferRequest transferRequest)
             throws Exception, SameFromAndToAccountException, InvalidUserException,
             InvalidAmountException, UserDoesNotOwnTheAccountToTransfer {
         transactionRequestValidator.validate(transferRequest, userRepository, userAccountRepository);
